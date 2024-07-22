@@ -1,6 +1,8 @@
 import pytest
 
 from main import BooksCollector
+
+
 @pytest.fixture
 def collector():
     collector = BooksCollector()
@@ -9,9 +11,9 @@ def collector():
 
     return collector
 
+
 @pytest.fixture
 def collector_lst(collector):
-
     collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
     collector.add_new_book('Гордость и предубеждение и зомби V2')
     collector.set_book_genre('Гордость и предубеждение и зомби V2', 'Ужасы')
