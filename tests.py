@@ -71,7 +71,7 @@ class TestBooksCollector:
 
     def test_set_book_genre_not_from_books_genre_is_none(self, collector):
 
-        assert collector.set_book_genre('Henry Ford', 'Детективы') is None  # сообщение об ошибке/ ожидаемый результат
+        assert collector.set_book_genre('Henry Ford', 'Детективы') == None  # сообщение об ошибке/ ожидаемый результат
 
 # get_book_genre
     def test_get_book_genre_get_set_genre(self, collector):
@@ -85,13 +85,14 @@ class TestBooksCollector:
         assert collector.get_book_genre('Henry Ford') == None  # сообщение об ошибке/ ожидаемый результат
 
 # get_books_with_specific_genre
-    @pytest.mark.parametrize('genre', ['Фантастика', 'Ужасы', 'Детективы', 'Мультфильмы', 'Комедии'])
-    def test_get_books_with_specific_genre_get_lst_books_for_genre(self, collector_lst, genre):
+    lst_books_for_genre = [['Ужасы', ['Гордость и предубеждение и зомби', 'Гордость и предубеждение и зомби V2']],
+                           ['Комедии', ['Что делать, если ваш кот хочет вас убить', 'Что делать, если ваш кот V2']],
+                           ['Мультфильмы', ['38 попугаев', '38 попугаев V2']],
+                           ['Детективы', ['Шерлок Холмс', 'Шерлок Холмс V2']],
+                           ['Фантастика', ['351 градус по фарингейту', '351 градус по фарингейту V2']]]
 
-        books_for_genre = []
-        for name, book_genre in collector_lst.books_genre.items():
-            if book_genre == genre:
-                books_for_genre.append(name)
+    @pytest.mark.parametrize('genre, books_for_genre', lst_books_for_genre)
+    def test_get_books_with_specific_genre_get_lst_books_for_genre(self, collector_lst, genre, books_for_genre):
 
         assert collector_lst.get_books_with_specific_genre(genre) == books_for_genre
 
@@ -100,23 +101,26 @@ class TestBooksCollector:
         assert collector_lst.get_books_with_specific_genre('Абвгд') == []  # сообщение об ошибке/ ожидаемый результат
 
 # get_books_genre
-    def test_get_books_genre_get_dict_all_books(self, collector_lst):
+    def test_get_books_genre_get_dict_all_books(self, collector, collector_lst):
 
-        assert collector_lst.get_books_genre() == collector_lst.books_genre
+        lst_books = {'Гордость и предубеждение и зомби': 'Ужасы', 'Гордость и предубеждение и зомби V2': 'Ужасы',
+                     'Что делать, если ваш кот хочет вас убить': 'Комедии', 'Что делать, если ваш кот V2': 'Комедии',
+                     '38 попугаев': 'Мультфильмы', '38 попугаев V2': 'Мультфильмы', 'Шерлок Холмс': 'Детективы',
+                     'Шерлок Холмс V2': 'Детективы', '351 градус по фарингейту': 'Фантастика',
+                     '351 градус по фарингейту V2': 'Фантастика'}
+
+        assert collector.get_books_genre() == lst_books
 
 # get_books_for_children
-    def test_get_books_for_children_get_list_books_without_age_rating(self, collector_lst):
+    def test_get_books_for_children_get_list_books_without_age_rating(self, collector, collector_lst):
 
-        collector_lst.add_new_book('Книга без жанра')
+        collector.add_new_book('Книга без жанра')
 
-        lst_books_for_children = []
-        genre_age_rating = ['Ужасы', 'Детективы']
-        lst_genre = ['Фантастика', 'Ужасы', 'Детективы', 'Мультфильмы', 'Комедии']
-        for name, genre in collector_lst.books_genre.items():
-            if genre not in genre_age_rating and genre in lst_genre:
-                lst_books_for_children.append(name)
+        lst_books_for_children = ['Что делать, если ваш кот хочет вас убить', 'Что делать, если ваш кот V2',
+                                  '38 попугаев', '38 попугаев V2', '351 градус по фарингейту',
+                                  '351 градус по фарингейту V2']
 
-        assert collector_lst.get_books_for_children() == lst_books_for_children
+        assert collector.get_books_for_children() == lst_books_for_children
 
 # add_book_in_favorite
     def test_add_book_in_favorite_add_two_book(self, collector):
