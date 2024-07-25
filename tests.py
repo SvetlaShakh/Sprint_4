@@ -67,7 +67,8 @@ class TestBooksCollector:
         assert collector.books_genre['Гордость и предубеждение и зомби'] == ''
 
     def test_set_book_genre_not_from_books_genre_is_none(self, collector):
-        assert collector.set_book_genre('Henry Ford', 'Детективы') == None  # сообщение об ошибке/ ожидаемый результат
+        collector.set_book_genre('Henry Ford', 'Детективы')
+        assert len(collector.books_genre) == 1  # сообщение об ошибке/ ожидаемый результат
 
     # get_book_genre
     def test_get_book_genre_get_set_genre(self, collector):
@@ -79,11 +80,11 @@ class TestBooksCollector:
         assert collector.get_book_genre('Henry Ford') == None  # сообщение об ошибке/ ожидаемый результат
 
     # get_books_with_specific_genre
-    lst_books_for_genre = [['Ужасы', ['Гордость и предубеждение и зомби', 'Гордость и предубеждение и зомби V2']],
-                           ['Комедии', ['Что делать, если ваш кот хочет вас убить', 'Что делать, если ваш кот V2']],
-                           ['Мультфильмы', ['38 попугаев', '38 попугаев V2']],
-                           ['Детективы', ['Шерлок Холмс', 'Шерлок Холмс V2']],
-                           ['Фантастика', ['351 градус по фарингейту', '351 градус по фарингейту V2']]]
+    lst_books_for_genre = [['Ужасы', ['Гордость и предубеждение и зомби']],
+                           ['Комедии', ['Что делать, если ваш кот хочет вас убить']],
+                           ['Мультфильмы', ['38 попугаев']],
+                           ['Детективы', ['Шерлок Холмс']],
+                           ['Фантастика', ['351 градус по фарингейту']]]
 
     @pytest.mark.parametrize('genre, books_for_genre', lst_books_for_genre)
     def test_get_books_with_specific_genre_get_lst_books_for_genre(self, collector_lst, genre, books_for_genre):
@@ -94,11 +95,9 @@ class TestBooksCollector:
 
     # get_books_genre
     def test_get_books_genre_get_dict_all_books(self, collector, collector_lst):
-        lst_books = {'Гордость и предубеждение и зомби': 'Ужасы', 'Гордость и предубеждение и зомби V2': 'Ужасы',
-                     'Что делать, если ваш кот хочет вас убить': 'Комедии', 'Что делать, если ваш кот V2': 'Комедии',
-                     '38 попугаев': 'Мультфильмы', '38 попугаев V2': 'Мультфильмы', 'Шерлок Холмс': 'Детективы',
-                     'Шерлок Холмс V2': 'Детективы', '351 градус по фарингейту': 'Фантастика',
-                     '351 градус по фарингейту V2': 'Фантастика'}
+        lst_books = {'Гордость и предубеждение и зомби': 'Ужасы', 'Что делать, если ваш кот хочет вас убить': 'Комедии',
+                     '38 попугаев': 'Мультфильмы', 'Шерлок Холмс': 'Детективы',
+                     '351 градус по фарингейту': 'Фантастика'}
 
         assert collector.get_books_genre() == lst_books
 
@@ -106,9 +105,8 @@ class TestBooksCollector:
     def test_get_books_for_children_get_list_books_without_age_rating(self, collector, collector_lst):
         collector.add_new_book('Книга без жанра')
 
-        lst_books_for_children = ['Что делать, если ваш кот хочет вас убить', 'Что делать, если ваш кот V2',
-                                  '38 попугаев', '38 попугаев V2', '351 градус по фарингейту',
-                                  '351 градус по фарингейту V2']
+        lst_books_for_children = ['Что делать, если ваш кот хочет вас убить', '38 попугаев',
+                                  '351 градус по фарингейту']
 
         assert collector.get_books_for_children() == lst_books_for_children
 
